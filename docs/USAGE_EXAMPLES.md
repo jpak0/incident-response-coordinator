@@ -531,7 +531,7 @@ Duration avgResolutionTime = incidentRepository.findAll().stream()
 
 ---
 
-## BAE Systems Interview Talking Points
+## Project Whys?
 
 ### Why This Architecture?
 "I used a layered architecture with clear separation of concerns - entities define the data model, repositories handle data access, services contain business logic, and controllers expose REST APIs. This mirrors the modular design patterns used in command and control systems where each layer can be tested and deployed independently."
