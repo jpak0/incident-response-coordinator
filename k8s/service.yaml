@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: incident-coordinator-service
+  labels:
+    app: incident-coordinator
+spec:
+  type: LoadBalancer  # Use LoadBalancer for cloud (EKS, AKS, GKE)
+                      # Change to NodePort for minikube/local testing
+  selector:
+    app: incident-coordinator
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80          # External port
+    targetPort: 8080  # Container port
+  sessionAffinity: ClientIP  # Sticky sessions

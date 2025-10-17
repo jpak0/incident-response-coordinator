@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-coordinator
+  labels:
+    app: incident-coordinator
+spec:
+  replicas: 2  # Run 2 instances for high availability
+  selector:
+    matchLabels:
+      app: incident-coordinator
+  template:
+    metadata:
+      labels:
+        app: incident-coordinator
+    spec:
+      containers:
+      - name: incident-coordinator
+        image: incident-coordinator:1.0.0
+        imagePullPolicy: IfNotPresent  # Use local image for testing
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        
+        # Environment variables (can override ConfigMap)
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "default"
+        - name: JAVA_OPTS
+          value: "-Xmx512m -Xms256m"
+        
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /api/incidents
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /api/incidents
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        # Resource limits
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        # Mount ConfigMap as volume (optional)
+        # volumeMounts:
+        # - name: config
+        #   mountPath: /config
+      
+      # volumes:
+      # - name: config
+      #   configMap:
+      #     name: incident-coordinator-config

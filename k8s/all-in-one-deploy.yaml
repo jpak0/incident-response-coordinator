@@ -1,0 +1,78 @@
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: incident-response
+
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: incident-coordinator-config
+  namespace: incident-response
+data:
+  SPRING_PROFILES_ACTIVE: "default"
+  JAVA_OPTS: "-Xmx512m -Xms256m"
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: incident-coordinator
+  namespace: incident-response
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: incident-coordinator
+  template:
+    metadata:
+      labels:
+        app: incident-coordinator
+    spec:
+      containers:
+      - name: incident-coordinator
+        image: incident-coordinator:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: incident-coordinator-config
+        livenessProbe:
+          httpGet:
+            path: /api/incidents
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/incidents
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: incident-coordinator-service
+  namespace: incident-response
+spec:
+  type: LoadBalancer
+  selector:
+    app: incident-coordinator
+  ports:
+  - port: 80
+    targetPort: 8080
