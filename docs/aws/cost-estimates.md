@@ -2,7 +2,7 @@
 
 Detailed cost breakdown for running Incident Response Coordinator on AWS.
 
-## 💵 Monthly Cost Comparison
+## Monthly Cost Comparison
 
 | Deployment Type | Cost/Month | Best For |
 |----------------|------------|----------|
@@ -13,7 +13,7 @@ Detailed cost breakdown for running Incident Response Coordinator on AWS.
 
 ---
 
-## 🧮 Development/Testing Setup
+## Development/Testing Setup
 
 **Configuration:**
 - 1 ECS Fargate task (0.5 vCPU, 1GB RAM)
@@ -75,7 +75,7 @@ Total: ~$82/month
 
 ---
 
-## 🚀 Medium Production Setup
+## Medium Production Setup
 
 **Configuration:**
 - 4 ECS Fargate tasks (1 vCPU, 2GB RAM each)
@@ -115,7 +115,7 @@ Total: ~$346/month
 
 ---
 
-## 📊 Cost Optimization Tips
+## Cost Optimization Tips
 
 ### 1. Use Fargate Spot (70% cheaper)
 ```bash
@@ -158,7 +158,7 @@ Total: ~$346/month
 
 ---
 
-## 💡 Free Tier Benefits
+## Free Tier Benefits
 
 **First 12 months (new AWS accounts):**
 ```
@@ -187,7 +187,7 @@ Data Transfer:
 
 ---
 
-## 🎯 Cost Comparison: ECS vs EKS
+## Cost Comparison: ECS vs EKS
 
 | Feature | ECS Fargate | EKS |
 |---------|-------------|-----|
@@ -200,7 +200,7 @@ Data Transfer:
 
 ---
 
-## 📈 Scaling Cost Examples
+## Scaling Cost Examples
 
 ### Scenario 1: Startup (1000 requests/day)
 - 1 ECS task
@@ -225,7 +225,7 @@ Data Transfer:
 
 ---
 
-## 🧾 Sample Invoice Breakdown
+## Sample Invoice Breakdown
 
 **Medium Production (1 month):**
 ```
@@ -264,8 +264,6 @@ Total:                            $346.47
 ```
 
 ---
-
-## 🎓 For BAE Interview
 
 **Key points to mention:**
 
