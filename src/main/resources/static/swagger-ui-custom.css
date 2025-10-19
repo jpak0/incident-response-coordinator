@@ -1,0 +1,192 @@
+.swagger-ui .topbar {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    border-bottom: 3px solid #3b82f6 !important;
+}
+
+.swagger-ui .topbar .topbar-wrapper .link {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 1.25rem !important;
+}
+
+/* Remove default Swagger logo */
+.swagger-ui .topbar-wrapper img {
+    display: none !important;
+}
+
+/* Add custom text logo */
+.swagger-ui .topbar-wrapper .link::before {
+    content: "Incident Response API" !important;
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    color: white !important;
+}
+
+/* Info Section */
+.swagger-ui .info {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    padding: 2.5rem !important;
+    border-radius: 8px !important;
+    margin-bottom: 2rem !important;
+    color: white !important;
+    border-left: 4px solid #3b82f6 !important;
+}
+
+.swagger-ui .info .title {
+    color: #ffffff !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 1rem !important;
+}
+
+.swagger-ui .info .description {
+    color: #cbd5e1 !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+}
+
+/* Endpoint Tags */
+.swagger-ui .opblock-tag {
+    background: #f8fafc !important;
+    border-left: 4px solid #3b82f6 !important;
+    border-radius: 6px !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    color: #0f172a !important;
+    padding: 1rem 1.25rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+/* Individual Operations */
+.swagger-ui .opblock {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    margin-bottom: 1rem !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+.swagger-ui .opblock:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1) !important;
+    border-color: #3b82f6 !important;
+}
+
+/* HTTP Method Colors */
+.swagger-ui .opblock.opblock-post {
+    border-left: 4px solid #10b981 !important;
+}
+
+.swagger-ui .opblock.opblock-get {
+    border-left: 4px solid #3b82f6 !important;
+}
+
+.swagger-ui .opblock.opblock-put {
+    border-left: 4px solid #f59e0b !important;
+}
+
+.swagger-ui .opblock.opblock-delete {
+    border-left: 4px solid #ef4444 !important;
+}
+
+/* Buttons */
+.swagger-ui .btn.execute {
+    background-color: #3b82f6 !important;
+    border: none !important;
+    color: white !important;
+    padding: 0.75rem 2rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    font-size: 1rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.swagger-ui .btn.execute:hover {
+    background-color: #2563eb !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
+}
+
+.swagger-ui .btn.try-out__btn {
+    background-color: white !important;
+    border: 2px solid #3b82f6 !important;
+    color: #3b82f6 !important;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.swagger-ui .btn.try-out__btn:hover {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
+
+/* Response Section */
+.swagger-ui .responses-wrapper {
+    background: #f8fafc !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin-top: 1.5rem !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Success Responses */
+.swagger-ui .response.response_200,
+.swagger-ui .response.response_201 {
+    border-left: 4px solid #10b981 !important;
+    background: rgba(16, 185, 129, 0.05) !important;
+}
+
+/* Error Responses */
+.swagger-ui .response.response_400,
+.swagger-ui .response.response_404 {
+    border-left: 4px solid #ef4444 !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}
+
+/* Code Blocks */
+.swagger-ui .highlight-code {
+    background: #0f172a !important;
+    border-radius: 6px !important;
+    border: 1px solid #1e293b !important;
+}
+
+/* Parameter Tables */
+.swagger-ui table thead tr th,
+.swagger-ui table thead tr td {
+    background: #0f172a !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 0.75rem !important;
+    border: none !important;
+}
+
+.swagger-ui table tbody tr td {
+    padding: 0.75rem !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Schema Section */
+.swagger-ui .model-box {
+    background: #f8fafc !important;
+    border-radius: 6px !important;
+    padding: 1rem !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+/* Overall Improvements */
+.swagger-ui .wrapper {
+    padding: 0 2rem 2rem !important;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+}
+
+/* Smooth Transitions */
+.swagger-ui .opblock-summary {
+    transition: all 0.3s ease !important;
+}
+
+.swagger-ui .opblock-summary:hover {
+    background: #f8fafc !important;
+}
+
