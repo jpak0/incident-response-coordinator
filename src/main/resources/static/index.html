@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Response Coordinator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header .tagline {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: #f8fafc;
+            padding: 3rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #3b82f6;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #64748b;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-description {
+            font-size: 0.9375rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: #f8fafc;
+            padding: 4rem 0;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .btn-secondary:hover {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-tertiary {
+            background: transparent;
+            color: #64748b;
+            border-color: #cbd5e1;
+        }
+
+        .btn-tertiary:hover {
+            background: white;
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        /* Tech Stack Section */
+        .tech-section {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .tech-badge {
+            padding: 0.75rem 1rem;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.3s ease;
+        }
+
+        .tech-badge:hover {
+            background: white;
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            padding: 2rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #60a5fa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Incident Response Coordinator</h1>
+        <p class="tagline">Cloud-Native Incident Management Platform</p>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">10</span>
+                    <span class="stat-label">API Endpoints</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">6</span>
+                    <span class="stat-label">Workflow States</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Audit Coverage</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">&lt;60s</span>
+                    <span class="stat-label">Auto-Escalation</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <div class="container">
+            <h2 class="section-title">Enterprise Features</h2>
+            <p class="section-subtitle">Production-ready incident management with automated workflows and comprehensive audit logging</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3 class="feature-title">Automated Escalation</h3>
+                    <p class="feature-description">Priority escalation based on SLA violations. Unacknowledged incidents automatically escalate every 60 seconds to ensure critical issues receive attention.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">State Machine Workflow</h3>
+                    <p class="feature-description">Enforced incident lifecycle transitions prevent invalid state changes. Clear progression from detection through resolution with validation at each step.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">Complete Audit Trail</h3>
+                    <p class="feature-description">Every action logged with timestamp, actor, and context. Compliance-ready audit logs for forensic analysis and post-incident reviews.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">RESTful API</h3>
+                    <p class="feature-description">Standards-based REST API with OpenAPI 3.0 documentation. Easy integration with monitoring tools, ticketing systems, and custom workflows.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">Cloud-Native Architecture</h3>
+                    <p class="feature-description">Containerized with Docker, orchestrated with Kubernetes. Deployable to AWS, Azure, GCP, or on-premise infrastructure with high availability.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <h3 class="feature-title">Multi-User Collaboration</h3>
+                    <p class="feature-description">Real-time incident updates and comment threads. Team coordination with clear ownership, assignment tracking, and collaborative troubleshooting.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="container">
+            <h2 class="section-title">Get Started</h2>
+            <p class="section-subtitle">Explore the API documentation or inspect the database</p>
+            
+            <div class="cta-buttons">
+                <a href="/swagger-ui.html" class="btn btn-primary">API Documentation</a>
+                <a href="/h2-console" class="btn btn-secondary">Database Console</a>
+                <a href="https://github.com/jpak0/incident-response-coordinator" class="btn btn-tertiary" target="_blank">View on GitHub</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tech Stack Section -->
+    <div class="tech-section">
+        <div class="container">
+            <h2 class="section-title">Technology Stack</h2>
+            <p class="section-subtitle">Built with modern, enterprise-grade technologies</p>
+            
+            <div class="tech-grid">
+                <div class="tech-badge">Java 17</div>
+                <div class="tech-badge">Spring Boot 3.3</div>
+                <div class="tech-badge">Spring Data JPA</div>
+                <div class="tech-badge">Hibernate</div>
+                <div class="tech-badge">PostgreSQL</div>
+                <div class="tech-badge">H2 Database</div>
+                <div class="tech-badge">Docker</div>
+                <div class="tech-badge">Kubernetes</div>
+                <div class="tech-badge">AWS</div>
+                <div class="tech-badge">OpenAPI 3.0</div>
+                <div class="tech-badge">Lombok</div>
+                <div class="tech-badge">Maven</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Built by <a href="https://github.com/jpak0" target="_blank">Joseph Pak</a> | 
+        <a href="https://github.com/jpak0/incident-response-coordinator" target="_blank">View Source Code</a></p>
+    </div>
+</body>
+</html>
+
