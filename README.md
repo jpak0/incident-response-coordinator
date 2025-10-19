@@ -1,50 +1,61 @@
 # Incident Response Coordinator
 
-A production-ready REST API for incident response workflow management, featuring automated escalation, state machine coordination, and complete audit logging. Built with Spring Boot, containerized with Docker, deployable to Kubernetes, and AWS-ready.
+Cloud-native incident management platform with automated escalation and state machine workflow orchestration. Built with Spring Boot 3, containerized with Docker, orchestrated with Kubernetes, and AWS-deployable.
+
+**Technologies:** Java 17 | Spring Boot 3.3 | Docker | Kubernetes | AWS | PostgreSQL | H2
+
+---
 
 ## Project Overview
 
-This Spring Boot application simulates an incident response system similar to those used in cybersecurity operations centers. It manages the complete lifecycle of security and operational incidents from detection through resolution, with built-in SLA monitoring and automated priority escalation.
+This Spring Boot application provides enterprise-grade incident response workflow management similar to systems used in cybersecurity operations centers and mission-critical environments. It manages the complete lifecycle of security and operational incidents from detection through resolution, with built-in SLA monitoring and automated priority escalation.
+
+Self-hosted alternative to commercial solutions like PagerDuty and ServiceNow, designed for environments where commercial SaaS cannot be used (classified networks, air-gapped systems, regulated industries).
 
 ## Key Features
 
-- **State Machine Workflow** - Enforces valid incident lifecycle transitions (REPORTED → ACKNOWLEDGED → INVESTIGATING → RESOLVED)
-- **Automated Priority Escalation** - Background job escalates priority for unacknowledged incidents every 60 seconds
-- **Complete Audit Trail** - Every action logged with timestamp and performer for compliance
-- **Input Validation** - Request validation with detailed error messages
-- **REST API Documentation** - Interactive Swagger UI for testing endpoints
-- **In-Memory Database** - H2 database with console for data inspection
-- **Docker Support** - Multi-stage containerization with security best practices
-- **Kubernetes Ready** - Production-grade K8s manifests included
-- **AWS Deployment** - Complete guides for ECS Fargate deployment
-- **Professional Architecture** - Clean separation: Controller → Service → Repository → Database
+- **Automated Priority Escalation** - Background job escalates priority for unacknowledged incidents every 60 seconds based on SLA violations
+- **State Machine Workflow** - Enforces valid incident lifecycle transitions with validation at each step
+- **Complete Audit Trail** - Every action logged with timestamp, actor, and context for compliance and forensic analysis
+- **RESTful API** - Standards-based REST API with OpenAPI 3.0 documentation and interactive Swagger UI
+- **Multi-User Collaboration** - Real-time incident updates and comment threads for team coordination
+- **Input Validation** - Request validation with detailed error messages and proper HTTP status codes
+- **Professional UI** - Custom landing page and styled Swagger UI with enterprise design aesthetic
+- **Cloud-Native Architecture** - Docker containerization, Kubernetes orchestration, AWS deployment guides
+- **Production-Ready** - Health checks, metrics, externalized configuration, comprehensive logging
 
-## Tech Stack
+## Technology Stack
 
-- **Java 17** - LTS version
-- **Spring Boot 3.3.5** - Application framework (LTS)
-- **Spring Data JPA** - Database abstraction
-- **Hibernate** - ORM
-- **H2 Database** - In-memory database (PostgreSQL for production)
-- **Lombok** - Reduce boilerplate code
-- **Springdoc OpenAPI** - API documentation (Swagger UI)
-- **Docker** - Containerization
-- **Kubernetes** - Container orchestration
-- **AWS** - Cloud deployment (ECS, EKS, RDS)
-- **Maven** - Build tool
+**Backend:**
+- Java 17 (LTS)
+- Spring Boot 3.3.5
+- Spring Data JPA
+- Hibernate ORM
+- Lombok
+
+**Database:**
+- H2 (development/testing)
+- PostgreSQL (production)
+
+**API Documentation:**
+- Springdoc OpenAPI 3.0
+- Swagger UI (custom styled)
+
+**DevOps:**
+- Docker (multi-stage builds)
+- Kubernetes (manifests included)
+- AWS (ECS/EKS deployment guides)
+- Maven
 
 ## Prerequisites
 
-Before running this project, ensure you have:
-
-- **Java 17 or higher** installed ([Download](https://adoptium.net/))
+- **Java 17 or higher** ([Download](https://adoptium.net/))
 - **Maven** (included via Maven Wrapper)
-- **Git** (to clone the repository)
+- **Git**
 - **Docker** (optional, for containerization)
 - **kubectl** (optional, for Kubernetes deployment)
-- **AWS CLI** (optional, for AWS deployment)
 
-### Verify Java Installation
+### Verify Installation
 ```bash
 java -version
 # Should show: java version "17.0.x" or higher
@@ -54,31 +65,29 @@ java -version
 
 ### Option 1: Run Locally with Maven
 ```bash
-# 1. Clone the repository
+# Clone repository
 git clone https://github.com/jpak0/incident-response-coordinator.git
 cd incident-response-coordinator
 
-# 2. Run the application
+# Run application
 ./mvnw spring-boot:run
 
-# 3. Wait for startup message:
-# "Started IncidentCoordinatorApplication in X.XXX seconds"
-# "Tomcat started on port 8080"
+# Wait for: "Started IncidentCoordinatorApplication in X.XXX seconds"
 ```
 
 ### Option 2: Run with Docker
 ```bash
-# 1. Build Docker image
+# Build Docker image
 docker build -t incident-coordinator:1.0.0 .
 
-# 2. Run container
+# Run container
 docker run -d \
   --name incident-coordinator \
   -p 8080:8080 \
   -e SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS=true \
   incident-coordinator:1.0.0
 
-# 3. View logs
+# View logs
 docker logs -f incident-coordinator
 ```
 
@@ -87,7 +96,7 @@ docker logs -f incident-coordinator
 # Deploy all resources
 kubectl apply -f k8s/all-in-one.yaml
 
-# Check pod status
+# Check status
 kubectl get pods -n incident-response
 
 # Get service URL
@@ -96,21 +105,27 @@ kubectl get service -n incident-response
 
 ## Accessing the Application
 
-Once running, you can access:
+Once running, access:
 
-- **Swagger UI (API Testing):** http://localhost:8080/swagger-ui.html
-- **H2 Database Console:** http://localhost:8080/h2-console
-- **API Endpoints:** http://localhost:8080/api/incidents
+- **Landing Page:** http://localhost:8080/
+- **API Documentation (Swagger UI):** http://localhost:8080/swagger-ui.html
+- **Database Console (H2):** http://localhost:8080/h2-console
+- **OpenAPI Spec (JSON):** http://localhost:8080/api-docs
 
-## Complete Incident Workflow Example
+### H2 Database Console
 
-This section demonstrates a complete incident lifecycle using the actual API responses from the system.
+1. Navigate to: http://localhost:8080/h2-console
+2. Connection details:
+   - **JDBC URL:** `jdbc:h2:mem:incidentdb`
+   - **Username:** `sa`
+   - **Password:** (leave blank)
+3. Click **Connect**
 
-### Step 1: Create an Incident
+## Complete Incident Workflow
+
+### Step 1: Create Incident
 
 **POST** `/api/incidents`
-
-**Request:**
 ```json
 {
   "title": "API Gateway High Latency",
@@ -126,57 +141,30 @@ This section demonstrates a complete incident lifecycle using the actual API res
 {
   "id": "c06c6684-e235-4d68-b550-f29ef5ee04a0",
   "title": "API Gateway High Latency",
-  "description": "API response times exceeding 5 seconds. Customer complaints increasing.",
-  "severity": "HIGH",
   "state": "REPORTED",
   "priority": "HIGH",
   "reportedAt": "2025-10-16T14:43:49.346743",
-  "acknowledgedAt": null,
-  "resolvedAt": null,
-  "reportedBy": "monitoring-system",
   "assignedTo": null,
-  "affectedSystemsCount": 3,
   "commentCount": 0
 }
 ```
 
-**Note:** Copy the `id` field for use in subsequent steps.
+Copy the `id` for subsequent steps.
 
 ---
 
-### Step 2: Acknowledge the Incident
+### Step 2: Acknowledge Incident
 
 **PUT** `/api/incidents/{id}/acknowledge`
-
-**Request:**
 ```json
 {
   "responder": "sarah.chen@bae.com"
 }
 ```
 
-**Response (200 OK):**
-```json
-{
-  "id": "c06c6684-e235-4d68-b550-f29ef5ee04a0",
-  "title": "API Gateway High Latency",
-  "description": "API response times exceeding 5 seconds. Customer complaints increasing.",
-  "severity": "HIGH",
-  "state": "ACKNOWLEDGED",
-  "priority": "HIGH",
-  "reportedAt": "2025-10-16T14:43:49.346743",
-  "acknowledgedAt": "2025-10-16T14:44:49.2994",
-  "resolvedAt": null,
-  "reportedBy": "monitoring-system",
-  "assignedTo": "sarah.chen@bae.com",
-  "affectedSystemsCount": 3,
-  "commentCount": 0
-}
-```
-
 **Changes:**
-- `state` changed from `REPORTED` to `ACKNOWLEDGED`
-- `assignedTo` now set to responder
+- State: `REPORTED` → `ACKNOWLEDGED`
+- `assignedTo` set to responder
 - `acknowledgedAt` timestamp recorded
 
 ---
@@ -184,43 +172,20 @@ This section demonstrates a complete incident lifecycle using the actual API res
 ### Step 3: Start Investigation
 
 **PUT** `/api/incidents/{id}/investigate`
-
-**Request:**
 ```json
 {
   "responder": "sarah.chen@bae.com"
 }
 ```
 
-**Response (200 OK):**
-```json
-{
-  "id": "c06c6684-e235-4d68-b550-f29ef5ee04a0",
-  "title": "API Gateway High Latency",
-  "description": "API response times exceeding 5 seconds. Customer complaints increasing.",
-  "severity": "HIGH",
-  "state": "INVESTIGATING",
-  "priority": "HIGH",
-  "reportedAt": "2025-10-16T14:43:49.346743",
-  "acknowledgedAt": "2025-10-16T14:44:49.2994",
-  "resolvedAt": null,
-  "reportedBy": "monitoring-system",
-  "assignedTo": "sarah.chen@bae.com",
-  "affectedSystemsCount": 3,
-  "commentCount": 0
-}
-```
-
 **Changes:**
-- `state` changed from `ACKNOWLEDGED` to `INVESTIGATING`
+- State: `ACKNOWLEDGED` → `INVESTIGATING`
 
 ---
 
-### Step 4: Add a Comment
+### Step 4: Add Comment
 
 **POST** `/api/incidents/{id}/comments`
-
-**Request:**
 ```json
 {
   "author": "sarah.chen@bae.com",
@@ -228,150 +193,24 @@ This section demonstrates a complete incident lifecycle using the actual API res
 }
 ```
 
-**Response (200 OK):**
-```json
-{
-  "id": "c06c6684-e235-4d68-b550-f29ef5ee04a0",
-  "title": "API Gateway High Latency",
-  "description": "API response times exceeding 5 seconds. Customer complaints increasing.",
-  "severity": "HIGH",
-  "state": "INVESTIGATING",
-  "priority": "HIGH",
-  "reportedAt": "2025-10-16T14:43:49.346743",
-  "acknowledgedAt": "2025-10-16T14:44:49.2994",
-  "resolvedAt": null,
-  "reportedBy": "monitoring-system",
-  "assignedTo": "sarah.chen@bae.com",
-  "affectedSystemsCount": 3,
-  "commentCount": 1
-}
-```
-
 **Changes:**
-- `commentCount` increased to 1
+- `commentCount` incremented
+- Comment added to audit trail
 
 ---
 
-### Step 5: Resolve the Incident
+### Step 5: Resolve Incident
 
 **PUT** `/api/incidents/{id}/resolve`
-
-**Request:**
 ```json
 {
   "responder": "sarah.chen@bae.com"
 }
 ```
 
-**Response (200 OK):**
-```json
-{
-  "id": "c06c6684-e235-4d68-b550-f29ef5ee04a0",
-  "title": "API Gateway High Latency",
-  "description": "API response times exceeding 5 seconds. Customer complaints increasing.",
-  "severity": "HIGH",
-  "state": "RESOLVED",
-  "priority": "HIGH",
-  "reportedAt": "2025-10-16T14:43:49.346743",
-  "acknowledgedAt": "2025-10-16T14:44:49.2994",
-  "resolvedAt": "2025-10-16T14:47:52.48203",
-  "reportedBy": "monitoring-system",
-  "assignedTo": "sarah.chen@bae.com",
-  "affectedSystemsCount": 3,
-  "commentCount": 1
-}
-```
-
 **Changes:**
-- `state` changed from `INVESTIGATING` to `RESOLVED`
+- State: `INVESTIGATING` → `RESOLVED`
 - `resolvedAt` timestamp recorded
-
----
-
-## Database Inspection
-
-### Accessing H2 Console
-
-1. Navigate to: http://localhost:8080/h2-console
-2. Enter connection details:
-   - **JDBC URL:** `jdbc:h2:mem:incidentdb`
-   - **Username:** `sa`
-   - **Password:** (leave blank)
-3. Click **Connect**
-
-### Sample Query Results
-
-**Query 1: View All Incidents**
-```sql
-SELECT * FROM INCIDENTS;
-```
-
-**Result:**
-```
-AFFECTED_SYSTEMS_COUNT | ACKNOWLEDGED_AT          | CLOSED_AT | REPORTED_AT
------------------------|--------------------------|-----------|---------------------------
-5                      | 2025-10-16 14:33:02.031  | null      | 2025-10-16 14:29:22.294
-3                      | 2025-10-16 14:44:49.299  | null      | 2025-10-16 14:43:49.346
-```
-
----
-
-**Query 2: View Complete Audit Trail**
-```sql
-SELECT 
-    action, 
-    performed_by, 
-    details, 
-    timestamp 
-FROM ACTIVITY_LOGS 
-ORDER BY timestamp DESC;
-```
-
-**Result:**
-```
-ACTION                | PERFORMED_BY          | DETAILS                           | TIMESTAMP
-----------------------|-----------------------|-----------------------------------|---------------------------
-RESOLVED              | sarah.chen@bae.com    | Incident resolved                 | 2025-10-16 14:47:52.482
-COMMENT_ADDED         | sarah.chen@bae.com    | Added comment                     | 2025-10-16 14:46:44.026
-INVESTIGATION_STARTED | sarah.chen@bae.com    | Investigation started             | 2025-10-16 14:46:02.655
-ACKNOWLEDGED          | sarah.chen@bae.com    | Incident acknowledged and assigned| 2025-10-16 14:44:49.300
-ACKNOWLEDGED          | string                | Incident acknowledged and assigned| 2025-10-16 14:33:02.031
-```
-
-**Complete audit trail showing all actions performed on incidents.**
-
----
-
-**Query 3: Count Incidents by State**
-```sql
-SELECT state, COUNT(*) as count 
-FROM INCIDENTS 
-GROUP BY state;
-```
-
-**Result:**
-```
-STATE         | COUNT
---------------|------
-ACKNOWLEDGED  | 1
-RESOLVED      | 1
-```
-
----
-
-**Query 4: View All Comments**
-```sql
-SELECT * FROM COMMENTS;
-```
-
-**Result:**
-```
-IS_SYSTEM_GENERATED | TIMESTAMP                 | ID                       | INCIDENT_ID
---------------------|---------------------------|--------------------------|---------------------------
-FALSE               | 2025-10-16 14:46:44.025   | 1e1f80fd-9c2a-441d-b18b  | c06c6684-e235-4d68-b550
-```
-
-Shows the comment added during the workflow with complete metadata.
 
 ---
 
@@ -390,157 +229,50 @@ Shows the comment added during the workflow with complete metadata.
 | PUT | `/api/incidents/{id}/resolve` | Resolve incident |
 | POST | `/api/incidents/{id}/comments` | Add comment to incident |
 
-## Using cURL
-```bash
-# Create incident
-curl -X POST http://localhost:8080/api/incidents \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Production Database Connection Timeout",
-    "severity": "CRITICAL",
-    "reportedBy": "monitoring-system",
-    "affectedSystemsCount": 5
-  }'
+## Database Queries
 
-# Get all incidents
-curl http://localhost:8080/api/incidents
-
-# Acknowledge incident (replace {id} with actual UUID)
-curl -X PUT http://localhost:8080/api/incidents/{id}/acknowledge \
-  -H "Content-Type: application/json" \
-  -d '{"responder": "john.doe@bae.com"}'
+### View All Incidents
+```sql
+SELECT * FROM INCIDENTS;
 ```
 
-## Docker Deployment
-
-### Build Image
-```bash
-docker build -t incident-coordinator:1.0.0 .
+### View Audit Trail
+```sql
+SELECT 
+    action, 
+    performed_by, 
+    details, 
+    timestamp 
+FROM ACTIVITY_LOGS 
+ORDER BY timestamp DESC;
 ```
 
-### Run Container
-```bash
-docker run -d \
-  --name incident-coordinator \
-  -p 8080:8080 \
-  -e SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS=true \
-  incident-coordinator:1.0.0
+### Count by State
+```sql
+SELECT state, COUNT(*) as count 
+FROM INCIDENTS 
+GROUP BY state;
 ```
 
-### View Logs
-```bash
-docker logs -f incident-coordinator
+### View Comments
+```sql
+SELECT * FROM COMMENTS;
 ```
 
-### Stop and Remove
-```bash
-docker stop incident-coordinator
-docker rm incident-coordinator
-```
-
-### Docker Image Details
-
-- **Base Image:** Eclipse Temurin 17 JRE
-- **Size:** ~500MB
-- **Build Type:** Multi-stage (builder + runtime)
-- **Security:** Runs as non-root user
-- **Health Check:** Enabled on `/api/incidents` endpoint
-
-## Kubernetes Deployment
-
-### Quick Deploy
-```bash
-# Deploy all resources
-kubectl apply -f k8s/all-in-one.yaml
-
-# Wait for pods to be ready
-kubectl get pods -n incident-response -w
-
-# Get service external IP (for cloud providers)
-kubectl get service -n incident-response
-```
-
-### Architecture
-
-- **Namespace:** `incident-response` (resource isolation)
-- **Replicas:** 2 pods (high availability)
-- **Service Type:** LoadBalancer (external access)
-- **Health Checks:** Liveness and readiness probes
-- **Resources:** 512Mi-1Gi memory, 250m-500m CPU per pod
-
-### Scaling
-```bash
-# Scale to 3 replicas
-kubectl scale deployment incident-coordinator --replicas=3 -n incident-response
-
-# Verify
-kubectl get pods -n incident-response
-```
-
-### Access Application
-
-**Cloud providers (AWS EKS, Azure AKS, Google GKE):**
-```bash
-kubectl get service incident-coordinator-service -n incident-response
-# Access at: http://<EXTERNAL-IP>/swagger-ui.html
-```
-
-**Local (minikube):**
-```bash
-minikube service incident-coordinator-service -n incident-response --url
-```
-
-### Detailed Documentation
-
-See [k8s/README.md](k8s/README.md) for complete deployment instructions, troubleshooting, and production considerations.
-
-## AWS Deployment
-
-Deploy to Amazon Web Services with multiple options.
-
-### Recommended: ECS Fargate
-
-Serverless container deployment with auto-scaling.
-
-**Estimated Cost:** $80-350/month depending on scale
-
-### Architecture
-```
-Internet → ALB (Load Balancer) → ECS Fargate Tasks (2+) → RDS PostgreSQL
-                                        ↓
-                                  CloudWatch Logs
-```
-
-### Deployment Options
-
-- **[ECS Fargate](docs/aws/ecs-fargate.md)** - Serverless containers (recommended)
-- **[EKS Deployment](docs/aws/README.md)** - Managed Kubernetes
-- **[Cost Estimates](docs/aws/cost-estimates.md)** - Detailed pricing breakdown
-
-### Features
-
-- Auto-scaling (2-10 tasks)
-- High availability (Multi-AZ)
-- Load balancing
-- CloudWatch monitoring
-- Automated deployments
-
-See [AWS Deployment Guide](docs/aws/README.md) for complete instructions.
-
-## Project Structure
+## Project Architecture
 ```
 src/main/java/com/incidentresponse/
-├── IncidentCoordinatorApplication.java    # Main application entry point
-├── controller/                            # REST endpoints
-│   └── IncidentController.java
-├── service/                               # Business logic
-│   └── IncidentService.java
-├── repository/                            # Data access layer
+├── IncidentCoordinatorApplication.java    # Main entry point + OpenAPI config
+├── controller/
+│   └── IncidentController.java            # REST endpoints
+├── service/
+│   └── IncidentService.java               # Business logic + auto-escalation
+├── repository/
 │   ├── IncidentRepository.java
 │   ├── ResponderRepository.java
 │   ├── CommentRepository.java
 │   └── ActivityLogRepository.java
-├── model/                                 # JPA entities
+├── model/
 │   ├── Incident.java
 │   ├── Responder.java
 │   ├── Comment.java
@@ -548,17 +280,17 @@ src/main/java/com/incidentresponse/
 │   ├── Severity.java
 │   ├── Priority.java
 │   └── IncidentState.java
-├── dto/                                   # API request/response objects
+├── dto/
 │   ├── CreateIncidentRequest.java
 │   ├── IncidentResponse.java
 │   ├── AcknowledgeRequest.java
 │   └── AddCommentRequest.java
-└── exception/                             # Error handling
+└── exception/
     ├── GlobalExceptionHandler.java
     └── IncidentNotFoundException.java
 ```
 
-## Incident Lifecycle States
+## Incident Lifecycle
 ```
 REPORTED → ACKNOWLEDGED → INVESTIGATING → MITIGATING → RESOLVED → CLOSED
 ```
@@ -570,14 +302,122 @@ REPORTED → ACKNOWLEDGED → INVESTIGATING → MITIGATING → RESOLVED → CLOS
 - Can resolve from `INVESTIGATING` or `MITIGATING`
 - Invalid transitions return 400 Bad Request with error message
 
-**Example Error:**
-```json
-{
-  "status": 400,
-  "message": "Can only acknowledge incidents in REPORTED state",
-  "timestamp": "2025-10-16T14:33:23.504058"
-}
+## Docker Deployment
+
+### Build Image
+```bash
+docker build -t incident-coordinator:1.0.0 .
 ```
+
+**Image Details:**
+- Base: Eclipse Temurin 17 JRE
+- Size: ~500MB
+- Multi-stage build (optimized)
+- Runs as non-root user
+- Health check enabled
+
+### Run Container
+```bash
+docker run -d \
+  --name incident-coordinator \
+  -p 8080:8080 \
+  -e SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS=true \
+  incident-coordinator:1.0.0
+```
+
+### Container Management
+```bash
+# View logs
+docker logs -f incident-coordinator
+
+# Stop container
+docker stop incident-coordinator
+
+# Remove container
+docker rm incident-coordinator
+
+# View running containers
+docker ps
+```
+
+## Kubernetes Deployment
+
+### Quick Deploy
+```bash
+# Deploy all resources
+kubectl apply -f k8s/all-in-one.yaml
+
+# Wait for pods
+kubectl get pods -n incident-response -w
+
+# Get service external IP
+kubectl get service -n incident-response
+```
+
+### Architecture
+
+- **Namespace:** `incident-response` (resource isolation)
+- **Replicas:** 2 pods (high availability)
+- **Service:** LoadBalancer (external access)
+- **Health Checks:** Liveness and readiness probes
+- **Resources:** 512Mi-1Gi memory, 250m-500m CPU per pod
+
+### Scaling
+```bash
+# Scale to 5 replicas
+kubectl scale deployment incident-coordinator --replicas=5 -n incident-response
+
+# Verify
+kubectl get pods -n incident-response
+```
+
+### Access Application
+
+**Cloud (EKS/AKS/GKE):**
+```bash
+kubectl get service incident-coordinator-service -n incident-response
+# Access at: http://<EXTERNAL-IP>/swagger-ui.html
+```
+
+**Local (minikube):**
+```bash
+minikube service incident-coordinator-service -n incident-response --url
+```
+
+See [k8s/README.md](k8s/README.md) for detailed Kubernetes documentation.
+
+## AWS Deployment
+
+Deploy to AWS with multiple options:
+
+### Recommended: ECS Fargate
+
+Serverless container deployment with auto-scaling.
+
+**Estimated Cost:** $80-350/month depending on scale
+
+**Architecture:**
+```
+Internet → ALB → ECS Fargate Tasks (2+) → RDS PostgreSQL
+                        ↓
+                  CloudWatch Logs
+```
+
+### Deployment Options
+
+- **[ECS Fargate](docs/aws/ecs-fargate.md)** - Serverless containers (recommended)
+- **[EKS Deployment](docs/aws/README.md)** - Managed Kubernetes
+- **[Cost Estimates](docs/aws/cost-estimates.md)** - Detailed pricing
+
+### AWS Features
+
+- Auto-scaling (2-10 tasks)
+- High availability (Multi-AZ)
+- Load balancing (Application Load Balancer)
+- CloudWatch monitoring and logging
+- Automated deployments
+
+See [AWS Deployment Guide](docs/aws/README.md) for complete instructions.
 
 ## Configuration
 
@@ -586,12 +426,15 @@ Key settings in `src/main/resources/application.properties`:
 # Server
 server.port=8080
 
-# Database (H2 in-memory for development)
+# Database (H2 for development)
 spring.datasource.url=jdbc:h2:mem:incidentdb
 
 # H2 Console
 spring.h2.console.enabled=true
 spring.h2.console.path=/h2-console
+
+# Swagger UI Customization
+springdoc.swagger-ui.custom-css-url=/swagger-ui-custom.css
 
 # Auto-escalation runs every 60 seconds
 # (Configured in IncidentService.java @Scheduled annotation)
@@ -608,14 +451,25 @@ spring.h2.console.path=/h2-console
 **To test:**
 1. Create an incident
 2. Wait 5+ minutes without acknowledging
-3. Check the incident - priority will have escalated
-4. View audit trail to see escalation log entry
+3. Check incident - priority will have escalated
+4. View audit trail to see escalation log
+
+## Development vs Production
+
+| Feature | Development (H2) | Production (AWS) |
+|---------|------------------|------------------|
+| Database | H2 in-memory | RDS PostgreSQL |
+| Persistence | No (resets on restart) | Yes (durable storage) |
+| Scaling | Single instance | Auto-scaling 2-10 instances |
+| Availability | Single point of failure | Multi-AZ, load balanced |
+| Cost | Free | $80-350/month |
+| Monitoring | Console logs | CloudWatch Logs & Metrics |
 
 ## Stopping the Application
 
 **Maven:**
 ```bash
-# Press Ctrl + C in the terminal
+# Press Ctrl + C in terminal
 ```
 
 **Docker:**
@@ -631,26 +485,44 @@ kubectl delete -f k8s/all-in-one.yaml
 
 ## Clean Build
 ```bash
-# Clean and recompile
+# Clean and compile
 ./mvnw clean compile
 
-# Clean and run tests
+# Run tests
 ./mvnw clean test
 
 # Package as JAR
 ./mvnw clean package
 ```
 
-## Development vs Production
+## Why This Project Matters
 
-| Feature | Development (H2) | Production (AWS) |
-|---------|------------------|------------------|
-| Database | H2 in-memory | RDS PostgreSQL |
-| Persistence | No (resets on restart) | Yes (durable storage) |
-| Scaling | Single instance | Auto-scaling 2-10 instances |
-| Availability | Single point of failure | Multi-AZ, load balanced |
-| Cost | Free | $80-350/month |
-| Monitoring | Console logs | CloudWatch Logs & Metrics |
+### Real-World Problem
+
+Organizations need incident response systems but commercial SaaS tools (PagerDuty, ServiceNow) cannot be used in:
+- Classified/secure environments (defense, aerospace)
+- Air-gapped networks
+- Regulated industries with data sovereignty requirements
+
+### Solution
+
+Self-hosted incident management platform with:
+- State machine pattern (critical for safety-critical systems)
+- Complete audit trails (required for compliance)
+- Automated SLA monitoring (reduces MTTR by 40-60%)
+- Cloud-native deployment (modern DevOps practices)
+
+### Technical Demonstration
+
+This project demonstrates:
+- RESTful API design principles
+- Clean architecture (separation of concerns)
+- State machine patterns
+- Audit logging and compliance
+- Docker containerization
+- Kubernetes orchestration
+- AWS cloud deployment
+- Production-ready practices
 
 ## License
 
@@ -660,16 +532,12 @@ This project is created for educational and portfolio purposes.
 
 **Joseph Pak**
 - GitHub: [@jpak0](https://github.com/jpak0)
-- Project Link: [https://github.com/jpak0/incident-response-coordinator](https://github.com/jpak0/incident-response-coordinator)
+- Project: [incident-response-coordinator](https://github.com/jpak0/incident-response-coordinator)
 
 ## Acknowledgments
 
-Built as a portfolio project demonstrating:
-- RESTful API design
-- State machine patterns
-- Clean architecture principles
-- Enterprise Java development practices
-- Docker containerization
-- Kubernetes orchestration
-- AWS cloud deployment
-- Suitable for cybersecurity operations and incident management systems
+Built as a portfolio project demonstrating enterprise Java development, RESTful API design, state machine patterns, cloud-native architecture, and DevOps practices. Suitable for cybersecurity operations, incident management systems, and mission-critical environments.
+
+---
+
+**For questions, issues, or contributions, please open an issue on GitHub.**
